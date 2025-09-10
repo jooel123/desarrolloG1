@@ -3,7 +3,6 @@
 Este proyecto integra **tres fuentes de datos distintas**, cada una cargada en **PostgreSQL** y analizada con **Python (pandas, SQLAlchemy, Jupyter)**.  
 El objetivo es construir **DataFrames principales** para exploración, aplicar filtros representativos y generar valor de negocio a partir de los datos.
 
----
 
 ## 📂 1. Counterfeit Product Detection Dataset
 
@@ -32,7 +31,6 @@ El objetivo es construir **DataFrames principales** para exploración, aplicar f
     2. Envíos costosos (top 10%).  
     3. Envíos lentos (≥ 10 días).
 
----
 
 ## 📂 2. Olist Customers Dataset
 
@@ -61,7 +59,7 @@ El objetivo es construir **DataFrames principales** para exploración, aplicar f
     2. Duplicados en `customer_unique_id`.  
     3. Top 10 IDs más repetidos.
 
----
+
 
 ## 📂 3. Customer_DF Dataset
 
@@ -90,7 +88,7 @@ El objetivo es construir **DataFrames principales** para exploración, aplicar f
     2. Direcciones de facturación duplicadas.  
     3. Clientes con fraude y más de 2 transacciones.
 
----
+
 
 ## ✅ Conclusiones Generales
 
@@ -100,7 +98,7 @@ El objetivo es construir **DataFrames principales** para exploración, aplicar f
 
 Este ecosistema de bases de datos brinda un **pipeline completo de BI**, cubriendo **transacciones, clientes y riesgo** desde múltiples fuentes.
 
----
+
 
 ## 🚀 Tecnologías utilizadas
 - **PostgreSQL + Docker** → Almacenamiento relacional.  
