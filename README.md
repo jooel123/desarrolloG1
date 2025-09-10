@@ -1,92 +1,90 @@
-# 🛡️ Proyecto BI – Counterfeit Product Detection
+Proyecto BI – Counterfeit Product Detection
 
-Este proyecto implementa un flujo de **Inteligencia de Negocios** usando PostgreSQL, Python (pandas, SQLAlchemy) y Jupyter Notebooks.  
-Se trabaja con el dataset de [Counterfeit Product Detection](https://www.kaggle.com/datasets/aimlveera/counterfeit-product-detection-dataset), estructurándolo en **tres DataFrames principales** para análisis.
 
----
-
-## 📊 1. DataFrame de Transacciones (`df_transacciones`)
-
-### Descripción
+📊 1. DataFrame de Transacciones (df_transacciones)
+Descripción
 Contiene cada operación registrada en el dataset. Es la fuente base para análisis financiero y de riesgo.
 
-| Columna              | Descripción                                |
-|----------------------|--------------------------------------------|
-| transaction_id       | Identificador único de la transacción      |
-| transaction_date     | Fecha de la operación                      |
-| customer_id          | Cliente asociado                           |
-| quantity, unit_price | Cantidad y precio unitario                 |
-| total_amount         | Monto total                                |
-| payment_method       | Forma de pago                              |
-| shipping_speed       | Velocidad de envío                         |
-| discount_applied     | Indicador de descuento aplicado            |
-| refund_requested     | Solicitud de reembolso                     |
-| velocity_flag        | Bandera de velocidad (fraude)              |
-| geolocation_mismatch | Bandera de geolocalización                 |
+Columna	Tipo de Dato	Descripción	Restricciones
+transaction_id	VARCHAR(50)	Identificador único de la transacción	PRIMARY KEY
+transaction_date	DATE	Fecha de la operación	NOT NULL
+customer_id	VARCHAR(50)	Cliente asociado	NOT NULL
+quantity	INTEGER	Cantidad comprada	CHECK (> 0)
+unit_price	DECIMAL(10,2)	Precio unitario	CHECK (> 0)
+total_amount	DECIMAL(12,2)	Monto total	CHECK (>= 0)
+payment_method	VARCHAR(20)	Forma de pago	NOT NULL
+shipping_speed	VARCHAR(15)	Velocidad de envío	NOT NULL
+discount_applied	BOOLEAN	Indicador de descuento aplicado	DEFAULT FALSE
+discount_percentage	DECIMAL(5,2)	Porcentaje de descuento	CHECK (>= 0 AND <= 100)
+refund_requested	BOOLEAN	Solicitud de reembolso	DEFAULT FALSE
+velocity_flag	BOOLEAN	Bandera de velocidad (fraude)	DEFAULT FALSE
+geolocation_mismatch	BOOLEAN	Bandera de geolocalización	DEFAULT FALSE
+Filtros aplicados
 
-### Filtros aplicados
-1. **Transacciones de alto valor** → top 10% de `total_amount`.  
-2. **Transacciones con banderas de riesgo** → `velocity_flag`, `geolocation_mismatch`, `refund_requested`.  
-3. **Transacciones con descuentos altos** → `discount_percentage >= 30%`.
+Transacciones de alto valor → top 10% de total_amount
 
----
+Transacciones con banderas de riesgo → velocity_flag = TRUE OR geolocation_mismatch = TRUE OR refund_requested = TRUE
 
-## 👤 2. DataFrame de Clientes (`df_clientes`)
+Transacciones con descuentos altos → discount_percentage >= 30%
 
-### Descripción
+👤 2. DataFrame de Clientes (df_clientes)
+Descripción
 Agrupa métricas a nivel de cliente para segmentación de usuarios.
 
-| Columna                  | Descripción                                 |
-|--------------------------|---------------------------------------------|
-| customer_id              | Identificador único del cliente             |
-| total_pedidos            | Número de compras realizadas                |
-| monto_total              | Valor total acumulado                       |
-| ticket_promedio          | Valor promedio de compra                    |
-| tasa_reembolso           | Proporción de pedidos con devolución        |
-| flags_riesgo             | Número de alertas de fraude asociadas       |
-| customer_location_mas_comun | Ubicación más frecuente del cliente     |
+Columna	Tipo de Dato	Descripción	Restricciones
+customer_id	VARCHAR(50)	Identificador único del cliente	PRIMARY KEY
+total_pedidos	INTEGER	Número de compras realizadas	DEFAULT 0
+monto_total	DECIMAL(12,2)	Valor total acumulado	DEFAULT 0.00
+ticket_promedio	DECIMAL(10,2)	Valor promedio de compra	DEFAULT 0.00
+tasa_reembolso	DECIMAL(5,2)	Proporción de pedidos con devolución	DEFAULT 0.00
+flags_riesgo	INTEGER	Número de alertas de fraude asociadas	DEFAULT 0
+customer_location	VARCHAR(100)	Ubicación más frecuente del cliente	NOT NULL
+customer_segment	VARCHAR(20)	Segmento del cliente	DEFAULT 'Standard'
+Filtros aplicados
 
-### Filtros aplicados
-1. **Clientes VIP** → top 10% en `monto_total`.  
-2. **Clientes riesgosos** → `tasa_reembolso >= 30%` o `flags_riesgo > 0`.  
-3. **Clientes frecuentes** → `total_pedidos >= 5`.
+Clientes VIP → top 10% en monto_total
 
----
+Clientes riesgosos → tasa_reembolso >= 30 OR flags_riesgo > 0
 
-## 🚚 3. DataFrame de Logística (`df_logistica`)
+Clientes frecuentes → total_pedidos >= 5
 
-### Descripción
+🚚 3. DataFrame de Logística (df_logistica)
+Descripción
 Evalúa desempeño logístico y cumplimiento de SLA (tiempo objetivo de entrega).
 
-| Columna             | Descripción                              |
-|---------------------|------------------------------------------|
-| shipping_speed      | Modalidad de envío                       |
-| delivery_time_days  | Tiempo real de entrega (días)            |
-| shipping_cost       | Costo del envío                          |
-| sla_dias            | SLA asignado según modalidad             |
-| cumple_sla          | Indicador de cumplimiento del SLA        |
+Columna	Tipo de Dato	Descripción	Restricciones
+shipping_id	SERIAL	ID único del envío	PRIMARY KEY
+transaction_id	VARCHAR(50)	ID de la transacción asociada	FOREIGN KEY
+shipping_speed	VARCHAR(15)	Modalidad de envío	NOT NULL
+delivery_time_days	INTEGER	Tiempo real de entrega (días)	CHECK (> 0)
+shipping_cost	DECIMAL(8,2)	Costo del envío	CHECK (>= 0)
+sla_dias	INTEGER	SLA asignado según modalidad	CHECK (> 0)
+cumple_sla	BOOLEAN	Indicador de cumplimiento del SLA	DEFAULT FALSE
+region	VARCHAR(50)	Región de destino	NOT NULL
+Filtros aplicados
 
-### Filtros aplicados
-1. **Envíos fuera de SLA** → `cumple_sla = FALSE`.  
-2. **Envíos costosos** → top 10% en `shipping_cost`.  
-3. **Envíos lentos** → `delivery_time_days >= 10`.
+Envíos fuera de SLA → cumple_sla = FALSE
 
----
+Envíos costosos → top 10% en shipping_cost
 
-## ✅ Conclusiones
+Envíos lentos → delivery_time_days >= 10
 
-- **Transacciones** → permiten identificar operaciones sospechosas (fraude, alto valor, devoluciones).  
-- **Clientes** → se segmentan en VIP, frecuentes y riesgosos.  
-- **Logística** → se mide eficiencia, costos y cumplimiento de SLA.  
+✅ Conclusiones del Análisis
+El equipo de estudiantes logró establecer que:
 
-Este esquema de **3 DataFrames + filtros** habilita un pipeline de **Inteligencia de Negocios** útil para detección de fraude, análisis de clientes estratégicos y optimización logística.
+Transacciones: Permiten identificar operaciones sospechosas (fraude, alto valor, devoluciones)
 
----
+Clientes: Se segmentan efectivamente en VIP, frecuentes y riesgosos
 
-## 🚀 Tecnologías utilizadas
-- **PostgreSQL + Docker** → base de datos principal.  
-- **Python (pandas, SQLAlchemy)** → procesamiento y análisis de datos.  
-- **Jupyter / DataSpell** → entorno de notebooks.  
-- **Kaggle Dataset** → fuente de datos (CSV).
+Logística: Se mide eficientemente la eficiencia, costos y cumplimiento de SLA
 
----
+Este esquema de 3 DataFrames + filtros habilita un pipeline de Inteligencia de Negocios útil para detección de fraude, análisis de clientes estratégicos y optimización logística.
+
+🚀 Tecnologías Utilizadas
+Tecnología	Versión	Uso en el Proyecto
+PostgreSQL	15+	Base de datos principal
+Docker	20.10+	Contenerización de la BD
+Python	3.10+	Procesamiento de datos
+pandas	2.0+	Manipulación de datos
+SQLAlchemy	2.0+	ORM para PostgreSQL
+Jupyter Notebooks	6.5+	Entorno de análisis
