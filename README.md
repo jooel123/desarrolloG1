@@ -1,13 +1,14 @@
 # 🛡️ Proyecto BI – Counterfeit Product Detection
 
-Este proyecto implementa un flujo de **Inteligencia de Negocios** usando PostgreSQL, Python (pandas, SQLAlchemy) y Jupyter Notebooks.  
-Se trabaja con el dataset de [Counterfeit Product Detection](https://www.kaggle.com/datasets/aimlveera/counterfeit-product-detection-dataset), estructurándolo en **tres DataFrames principales** para análisis.
+Este proyecto fue desarrollado por un grupo de tres integrantes con el propósito de aplicar un flujo de **Inteligencia de Negocios** empleando PostgreSQL, Python (pandas, SQLAlchemy) y Jupyter Notebooks.  
+
+La fuente de información utilizada proviene del dataset https://www.kaggle.com/datasets/aimlveera/counterfeit-product-detection-dataset , el cual fue organizado en **DataFrames**, cada uno enfocado en un área clave para el análisis.
 
 
 ## 📊 1. DataFrame de Transacciones (`df_transacciones`)
 
 ### Descripción
-Contiene cada operación registrada en el dataset. Es la fuente base para análisis financiero y de riesgo.
+En este DataFrame se registran todas las operaciones realizadas por los clientes. Se constituye como la base para los análisis financieros y de riesgo dentro del proyecto.
 
 | Columna              | Descripción                                |
 |----------------------|--------------------------------------------|
@@ -24,36 +25,36 @@ Contiene cada operación registrada en el dataset. Es la fuente base para análi
 | geolocation_mismatch | Bandera de geolocalización                 |
 
 ### Filtros aplicados
-1. **Transacciones de alto valor** → top 10% de `total_amount`.  
-2. **Transacciones con banderas de riesgo** → `velocity_flag`, `geolocation_mismatch`, `refund_requested`.  
-3. **Transacciones con descuentos altos** → `discount_percentage >= 30%`.
+1. Transacciones de alto valor (top 10% de `total_amount`).  
+2. Operaciones con banderas de riesgo (`velocity_flag`, `geolocation_mismatch`, `refund_requested`).  
+3. Compras con descuentos superiores al 30%.  
 
 
 ## 👤 2. DataFrame de Clientes (`df_clientes`)
 
 ### Descripción
-Agrupa métricas a nivel de cliente para segmentación de usuarios.
+Este conjunto de datos reúne métricas a nivel de cliente, con el fin de segmentar y analizar diferentes perfiles de usuarios.
 
-| Columna                  | Descripción                                 |
-|--------------------------|---------------------------------------------|
-| customer_id              | Identificador único del cliente             |
-| total_pedidos            | Número de compras realizadas                |
-| monto_total              | Valor total acumulado                       |
-| ticket_promedio          | Valor promedio de compra                    |
-| tasa_reembolso           | Proporción de pedidos con devolución        |
-| flags_riesgo             | Número de alertas de fraude asociadas       |
-| customer_location_mas_comun | Ubicación más frecuente del cliente     |
+| Columna                      | Descripción                                 |
+|------------------------------|---------------------------------------------|
+| customer_id                  | Identificador único del cliente             |
+| total_pedidos                | Número de compras realizadas                |
+| monto_total                  | Valor total acumulado                       |
+| ticket_promedio              | Valor promedio de compra                    |
+| tasa_reembolso               | Proporción de pedidos con devolución        |
+| flags_riesgo                 | Número de alertas de fraude asociadas       |
+| customer_location_mas_comun  | Ubicación más frecuente del cliente         |
 
 ### Filtros aplicados
-1. **Clientes VIP** → top 10% en `monto_total`.  
-2. **Clientes riesgosos** → `tasa_reembolso >= 30%` o `flags_riesgo > 0`.  
-3. **Clientes frecuentes** → `total_pedidos >= 5`.
+1. Clientes VIP → top 10% en `monto_total`.  
+2. Clientes riesgosos → `tasa_reembolso >= 30%` o `flags_riesgo > 0`.  
+3. Clientes frecuentes → `total_pedidos >= 5`.  
 
 
 ## 🚚 3. DataFrame de Logística (`df_logistica`)
 
 ### Descripción
-Evalúa desempeño logístico y cumplimiento de SLA (tiempo objetivo de entrega).
+En este DataFrame se estudia el desempeño logístico, con especial atención en los tiempos de entrega y el cumplimiento de los SLA.
 
 | Columna             | Descripción                              |
 |---------------------|------------------------------------------|
@@ -64,22 +65,21 @@ Evalúa desempeño logístico y cumplimiento de SLA (tiempo objetivo de entrega)
 | cumple_sla          | Indicador de cumplimiento del SLA        |
 
 ### Filtros aplicados
-1. **Envíos fuera de SLA** → `cumple_sla = FALSE`.  
-2. **Envíos costosos** → top 10% en `shipping_cost`.  
-3. **Envíos lentos** → `delivery_time_days >= 10`.
+1. Envíos fuera de SLA (`cumple_sla = FALSE`).  
+2. Envíos de alto costo (top 10% en `shipping_cost`).  
+3. Envíos con demoras considerables (`delivery_time_days >= 10`).  
 
 
 ## ✅ Conclusiones
 
-- **Transacciones** → permiten identificar operaciones sospechosas (fraude, alto valor, devoluciones).  
-- **Clientes** → se segmentan en VIP, frecuentes y riesgosos.  
-- **Logística** → se mide eficiencia, costos y cumplimiento de SLA.  
+- **Transacciones** → se identifican operaciones sospechosas por fraude, alto valor o devoluciones frecuentes.  
+- **Clientes** → se segmentan en perfiles estratégicos como VIP, frecuentes y de alto riesgo.  
+- **Logística** → se evalúa la eficiencia de entregas, costos y el cumplimiento de SLA.  
 
-Este esquema de **3 DataFrames + filtros** habilita un pipeline de **Inteligencia de Negocios** útil para detección de fraude, análisis de clientes estratégicos y optimización logística.
-
-
+La construcción de estos DataFrames, junto con sus respectivos filtros, permite establecer un flujo de **Inteligencia de Negocios** aplicable a la detección de fraude, la gestión de clientes clave y la optimización de procesos logísticos.
 ## 🚀 Tecnologías utilizadas
 - **PostgreSQL + Docker** → base de datos principal.  
 - **Python (pandas, SQLAlchemy)** → procesamiento y análisis de datos.  
 - **Jupyter / DataSpell** → entorno de notebooks.  
 - **Kaggle Dataset** → fuente de datos (CSV).
+
