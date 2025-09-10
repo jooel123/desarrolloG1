@@ -1,90 +1,93 @@
-Proyecto BI – Counterfeit Product Detection
+# 🛡️ Proyecto BI – Counterfeit Product Detection
 
+Este proyecto fue desarrollado por el grupo 01 con el propósito de aplicar un flujo de **Inteligencia de Negocios** empleando PostgreSQL, Python (pandas, SQLAlchemy) y Jupyter Notebooks.  
 
-📊 1. DataFrame de Transacciones (df_transacciones)
-Descripción
-Contiene cada operación registrada en el dataset. Es la fuente base para análisis financiero y de riesgo.
+La fuente de información utilizada proviene del dataset https://www.kaggle.com/datasets/aimlveera/counterfeit-product-detection-dataset , el cual fue organizado en **tres DataFrames principales**, cada uno enfocado en un área clave para el análisis.
 
-Columna	Tipo de Dato	Descripción	Restricciones
-transaction_id	VARCHAR(50)	Identificador único de la transacción	PRIMARY KEY
-transaction_date	DATE	Fecha de la operación	NOT NULL
-customer_id	VARCHAR(50)	Cliente asociado	NOT NULL
-quantity	INTEGER	Cantidad comprada	CHECK (> 0)
-unit_price	DECIMAL(10,2)	Precio unitario	CHECK (> 0)
-total_amount	DECIMAL(12,2)	Monto total	CHECK (>= 0)
-payment_method	VARCHAR(20)	Forma de pago	NOT NULL
-shipping_speed	VARCHAR(15)	Velocidad de envío	NOT NULL
-discount_applied	BOOLEAN	Indicador de descuento aplicado	DEFAULT FALSE
-discount_percentage	DECIMAL(5,2)	Porcentaje de descuento	CHECK (>= 0 AND <= 100)
-refund_requested	BOOLEAN	Solicitud de reembolso	DEFAULT FALSE
-velocity_flag	BOOLEAN	Bandera de velocidad (fraude)	DEFAULT FALSE
-geolocation_mismatch	BOOLEAN	Bandera de geolocalización	DEFAULT FALSE
-Filtros aplicados
+---
 
-Transacciones de alto valor → top 10% de total_amount
+## 📊 1. DataFrame de Transacciones (`df_transacciones`)
 
-Transacciones con banderas de riesgo → velocity_flag = TRUE OR geolocation_mismatch = TRUE OR refund_requested = TRUE
+### Descripción
+En este DataFrame se registran todas las operaciones realizadas por los clientes. Se constituye como la base para los análisis financieros y de riesgo dentro del proyecto.
 
-Transacciones con descuentos altos → discount_percentage >= 30%
+| Columna              | Descripción                                |
+|----------------------|--------------------------------------------|
+| transaction_id       | Identificador único de la transacción      |
+| transaction_date     | Fecha de la operación                      |
+| customer_id          | Cliente asociado                           |
+| quantity, unit_price | Cantidad y precio unitario                 |
+| total_amount         | Monto total                                |
+| payment_method       | Forma de pago                              |
+| shipping_speed       | Velocidad de envío                         |
+| discount_applied     | Indicador de descuento aplicado            |
+| refund_requested     | Solicitud de reembolso                     |
+| velocity_flag        | Bandera de velocidad (fraude)              |
+| geolocation_mismatch | Bandera de geolocalización                 |
 
-👤 2. DataFrame de Clientes (df_clientes)
-Descripción
-Agrupa métricas a nivel de cliente para segmentación de usuarios.
+### Filtros aplicados
+1. Transacciones de alto valor (top 10% de `total_amount`).  
+2. Operaciones con banderas de riesgo (`velocity_flag`, `geolocation_mismatch`, `refund_requested`).  
+3. Compras con descuentos superiores al 30%.  
 
-Columna	Tipo de Dato	Descripción	Restricciones
-customer_id	VARCHAR(50)	Identificador único del cliente	PRIMARY KEY
-total_pedidos	INTEGER	Número de compras realizadas	DEFAULT 0
-monto_total	DECIMAL(12,2)	Valor total acumulado	DEFAULT 0.00
-ticket_promedio	DECIMAL(10,2)	Valor promedio de compra	DEFAULT 0.00
-tasa_reembolso	DECIMAL(5,2)	Proporción de pedidos con devolución	DEFAULT 0.00
-flags_riesgo	INTEGER	Número de alertas de fraude asociadas	DEFAULT 0
-customer_location	VARCHAR(100)	Ubicación más frecuente del cliente	NOT NULL
-customer_segment	VARCHAR(20)	Segmento del cliente	DEFAULT 'Standard'
-Filtros aplicados
+---
 
-Clientes VIP → top 10% en monto_total
+## 👤 2. DataFrame de Clientes (`df_clientes`)
 
-Clientes riesgosos → tasa_reembolso >= 30 OR flags_riesgo > 0
+### Descripción
+Este conjunto de datos reúne métricas a nivel de cliente, con el fin de segmentar y analizar diferentes perfiles de usuarios.
 
-Clientes frecuentes → total_pedidos >= 5
+| Columna                      | Descripción                                 |
+|------------------------------|---------------------------------------------|
+| customer_id                  | Identificador único del cliente             |
+| total_pedidos                | Número de compras realizadas                |
+| monto_total                  | Valor total acumulado                       |
+| ticket_promedio              | Valor promedio de compra                    |
+| tasa_reembolso               | Proporción de pedidos con devolución        |
+| flags_riesgo                 | Número de alertas de fraude asociadas       |
+| customer_location_mas_comun  | Ubicación más frecuente del cliente         |
 
-🚚 3. DataFrame de Logística (df_logistica)
-Descripción
-Evalúa desempeño logístico y cumplimiento de SLA (tiempo objetivo de entrega).
+### Filtros aplicados
+1. Clientes VIP → top 10% en `monto_total`.  
+2. Clientes riesgosos → `tasa_reembolso >= 30%` o `flags_riesgo > 0`.  
+3. Clientes frecuentes → `total_pedidos >= 5`.  
 
-Columna	Tipo de Dato	Descripción	Restricciones
-shipping_id	SERIAL	ID único del envío	PRIMARY KEY
-transaction_id	VARCHAR(50)	ID de la transacción asociada	FOREIGN KEY
-shipping_speed	VARCHAR(15)	Modalidad de envío	NOT NULL
-delivery_time_days	INTEGER	Tiempo real de entrega (días)	CHECK (> 0)
-shipping_cost	DECIMAL(8,2)	Costo del envío	CHECK (>= 0)
-sla_dias	INTEGER	SLA asignado según modalidad	CHECK (> 0)
-cumple_sla	BOOLEAN	Indicador de cumplimiento del SLA	DEFAULT FALSE
-region	VARCHAR(50)	Región de destino	NOT NULL
-Filtros aplicados
+---
 
-Envíos fuera de SLA → cumple_sla = FALSE
+## 🚚 3. DataFrame de Logística (`df_logistica`)
 
-Envíos costosos → top 10% en shipping_cost
+### Descripción
+En este DataFrame se estudia el desempeño logístico, con especial atención en los tiempos de entrega y el cumplimiento de los SLA.
 
-Envíos lentos → delivery_time_days >= 10
+| Columna             | Descripción                              |
+|---------------------|------------------------------------------|
+| shipping_speed      | Modalidad de envío                       |
+| delivery_time_days  | Tiempo real de entrega (días)            |
+| shipping_cost       | Costo del envío                          |
+| sla_dias            | SLA asignado según modalidad             |
+| cumple_sla          | Indicador de cumplimiento del SLA        |
 
-✅ Conclusiones del Análisis
-El equipo de estudiantes logró establecer que:
+### Filtros aplicados
+1. Envíos fuera de SLA (`cumple_sla = FALSE`).  
+2. Envíos de alto costo (top 10% en `shipping_cost`).  
+3. Envíos con demoras considerables (`delivery_time_days >= 10`).  
 
-Transacciones: Permiten identificar operaciones sospechosas (fraude, alto valor, devoluciones)
+---
 
-Clientes: Se segmentan efectivamente en VIP, frecuentes y riesgosos
+## ✅ Conclusiones
 
-Logística: Se mide eficientemente la eficiencia, costos y cumplimiento de SLA
+- **Transacciones** → se identifican operaciones sospechosas por fraude, alto valor o devoluciones frecuentes.  
+- **Clientes** → se segmentan en perfiles estratégicos como VIP, frecuentes y de alto riesgo.  
+- **Logística** → se evalúa la eficiencia de entregas, costos y el cumplimiento de SLA.  
 
-Este esquema de 3 DataFrames + filtros habilita un pipeline de Inteligencia de Negocios útil para detección de fraude, análisis de clientes estratégicos y optimización logística.
+La construcción de estos tres DataFrames, junto con sus respectivos filtros, permite establecer un flujo de **Inteligencia de Negocios** aplicable a la detección de fraude, la gestión de clientes clave y la optimización de procesos logísticos.
 
-🚀 Tecnologías Utilizadas
-Tecnología	Versión	Uso en el Proyecto
-PostgreSQL	15+	Base de datos principal
-Docker	20.10+	Contenerización de la BD
-Python	3.10+	Procesamiento de datos
-pandas	2.0+	Manipulación de datos
-SQLAlchemy	2.0+	ORM para PostgreSQL
-Jupyter Notebooks	6.5+	Entorno de análisis
+---
+
+## 🚀 Tecnologías utilizadas
+- **PostgreSQL + Docker** → como base de datos principal.  
+- **Python (pandas, SQLAlchemy)** → para el procesamiento y análisis de datos.  
+- **Jupyter / DataSpell** → como entorno de notebooks.  
+- **Kaggle Dataset** → fuente de datos en formato CSV.  
+
+---
