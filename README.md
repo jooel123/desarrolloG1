@@ -4,7 +4,6 @@ Este proyecto fue desarrollado por un grupo de tres integrantes con el propósit
 
 La fuente de información utilizada proviene del dataset https://www.kaggle.com/datasets/aimlveera/counterfeit-product-detection-dataset , el cual fue organizado en **DataFrames**, cada uno enfocado en un área clave para el análisis.
 
----
 
 ## 📊 1. DataFrame de Transacciones (`df_transacciones`)
 
@@ -30,7 +29,6 @@ En este DataFrame se registran todas las operaciones realizadas por los clientes
 2. Operaciones con banderas de riesgo (`velocity_flag`, `geolocation_mismatch`, `refund_requested`).  
 3. Compras con descuentos superiores al 30%.  
 
----
 
 ## 👤 2. DataFrame de Clientes (`df_clientes`)
 
@@ -52,7 +50,6 @@ Este conjunto de datos reúne métricas a nivel de cliente, con el fin de segmen
 2. Clientes riesgosos → `tasa_reembolso >= 30%` o `flags_riesgo > 0`.  
 3. Clientes frecuentes → `total_pedidos >= 5`.  
 
----
 
 ## 🚚 3. DataFrame de Logística (`df_logistica`)
 
@@ -72,7 +69,6 @@ En este DataFrame se estudia el desempeño logístico, con especial atención en
 2. Envíos de alto costo (top 10% en `shipping_cost`).  
 3. Envíos con demoras considerables (`delivery_time_days >= 10`).  
 
----
 
 ## ✅ Conclusiones
 
@@ -81,6 +77,9 @@ En este DataFrame se estudia el desempeño logístico, con especial atención en
 - **Logística** → se evalúa la eficiencia de entregas, costos y el cumplimiento de SLA.  
 
 La construcción de estos DataFrames, junto con sus respectivos filtros, permite establecer un flujo de **Inteligencia de Negocios** aplicable a la detección de fraude, la gestión de clientes clave y la optimización de procesos logísticos.
-
----
+## 🚀 Tecnologías utilizadas
+- **PostgreSQL + Docker** → base de datos principal.  
+- **Python (pandas, SQLAlchemy)** → procesamiento y análisis de datos.  
+- **Jupyter / DataSpell** → entorno de notebooks.  
+- **Kaggle Dataset** → fuente de datos (CSV).
 
