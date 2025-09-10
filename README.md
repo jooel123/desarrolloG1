@@ -3,7 +3,6 @@
 Este proyecto implementa un flujo de **Inteligencia de Negocios** usando PostgreSQL, Python (pandas, SQLAlchemy) y Jupyter Notebooks.  
 Se trabaja con el dataset de [Counterfeit Product Detection](https://www.kaggle.com/datasets/aimlveera/counterfeit-product-detection-dataset), estructurándolo en **tres DataFrames principales** para análisis.
 
----
 
 ## 📊 1. DataFrame de Transacciones (`df_transacciones`)
 
@@ -29,7 +28,6 @@ Contiene cada operación registrada en el dataset. Es la fuente base para análi
 2. **Transacciones con banderas de riesgo** → `velocity_flag`, `geolocation_mismatch`, `refund_requested`.  
 3. **Transacciones con descuentos altos** → `discount_percentage >= 30%`.
 
----
 
 ## 👤 2. DataFrame de Clientes (`df_clientes`)
 
@@ -51,7 +49,6 @@ Agrupa métricas a nivel de cliente para segmentación de usuarios.
 2. **Clientes riesgosos** → `tasa_reembolso >= 30%` o `flags_riesgo > 0`.  
 3. **Clientes frecuentes** → `total_pedidos >= 5`.
 
----
 
 ## 🚚 3. DataFrame de Logística (`df_logistica`)
 
@@ -71,7 +68,6 @@ Evalúa desempeño logístico y cumplimiento de SLA (tiempo objetivo de entrega)
 2. **Envíos costosos** → top 10% en `shipping_cost`.  
 3. **Envíos lentos** → `delivery_time_days >= 10`.
 
----
 
 ## ✅ Conclusiones
 
@@ -81,12 +77,9 @@ Evalúa desempeño logístico y cumplimiento de SLA (tiempo objetivo de entrega)
 
 Este esquema de **3 DataFrames + filtros** habilita un pipeline de **Inteligencia de Negocios** útil para detección de fraude, análisis de clientes estratégicos y optimización logística.
 
----
 
 ## 🚀 Tecnologías utilizadas
 - **PostgreSQL + Docker** → base de datos principal.  
 - **Python (pandas, SQLAlchemy)** → procesamiento y análisis de datos.  
 - **Jupyter / DataSpell** → entorno de notebooks.  
 - **Kaggle Dataset** → fuente de datos (CSV).
-
----
