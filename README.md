@@ -1,8 +1,8 @@
 # 🛡️ Proyecto BI – Counterfeit Product Detection
 
-Este proyecto fue desarrollado por el grupo 01 con el propósito de aplicar un flujo de **Inteligencia de Negocios** empleando PostgreSQL, Python (pandas, SQLAlchemy) y Jupyter Notebooks.  
+Este proyecto fue desarrollado por un grupo de tres integrantes con el propósito de aplicar un flujo de **Inteligencia de Negocios** empleando PostgreSQL, Python (pandas, SQLAlchemy) y Jupyter Notebooks.  
 
-La fuente de información utilizada proviene del dataset https://www.kaggle.com/datasets/aimlveera/counterfeit-product-detection-dataset , el cual fue organizado en **tres DataFrames principales**, cada uno enfocado en un área clave para el análisis.
+La fuente de información utilizada proviene del dataset https://www.kaggle.com/datasets/aimlveera/counterfeit-product-detection-dataset , el cual fue organizado en **DataFrames**, cada uno enfocado en un área clave para el análisis.
 
 ---
 
@@ -80,14 +80,7 @@ En este DataFrame se estudia el desempeño logístico, con especial atención en
 - **Clientes** → se segmentan en perfiles estratégicos como VIP, frecuentes y de alto riesgo.  
 - **Logística** → se evalúa la eficiencia de entregas, costos y el cumplimiento de SLA.  
 
-La construcción de estos tres DataFrames, junto con sus respectivos filtros, permite establecer un flujo de **Inteligencia de Negocios** aplicable a la detección de fraude, la gestión de clientes clave y la optimización de procesos logísticos.
+La construcción de estos DataFrames, junto con sus respectivos filtros, permite establecer un flujo de **Inteligencia de Negocios** aplicable a la detección de fraude, la gestión de clientes clave y la optimización de procesos logísticos.
 
 ---
 
-## 🚀 Tecnologías utilizadas
-- **PostgreSQL + Docker** → como base de datos principal.  
-- **Python (pandas, SQLAlchemy)** → para el procesamiento y análisis de datos.  
-- **Jupyter / DataSpell** → como entorno de notebooks.  
-- **Kaggle Dataset** → fuente de datos en formato CSV.  
-
----
