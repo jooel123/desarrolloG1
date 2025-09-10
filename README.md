@@ -1,85 +1,109 @@
-# 🛡️ Proyecto BI – Counterfeit Product Detection
+# 🛡️ Proyecto BI – Inteligencia de Negocios
 
-Este proyecto fue desarrollado por un grupo de tres integrantes con el propósito de aplicar un flujo de **Inteligencia de Negocios** empleando PostgreSQL, Python (pandas, SQLAlchemy) y Jupyter Notebooks.  
+Este proyecto integra **tres fuentes de datos distintas**, cada una cargada en **PostgreSQL** y analizada con **Python (pandas, SQLAlchemy, Jupyter)**.  
+El objetivo es construir **DataFrames principales** para exploración, aplicar filtros representativos y generar valor de negocio a partir de los datos.
 
-La fuente de información utilizada proviene del dataset https://www.kaggle.com/datasets/aimlveera/counterfeit-product-detection-dataset , el cual fue organizado en **DataFrames**, cada uno enfocado en un área clave para el análisis.
+---
 
+## 📂 1. Counterfeit Product Detection Dataset
 
-## 📊 1. DataFrame de Transacciones (`df_transacciones`)
+**Fuente:** Kaggle – [Counterfeit Product Detection](https://www.kaggle.com/datasets/aimlveera/counterfeit-product-detection-dataset)  
+**Tabla en PostgreSQL:** `counterfeit_transactions`
 
-### Descripción
-En este DataFrame se registran todas las operaciones realizadas por los clientes. Se constituye como la base para los análisis financieros y de riesgo dentro del proyecto.
+### DataFrames principales
+- **Transacciones (`df_transacciones`)**  
+  Variables: `transaction_id`, `transaction_date`, `customer_id`, `quantity`, `unit_price`, `total_amount`, `payment_method`, `shipping_speed`, `discount_applied`, `refund_requested`, `velocity_flag`, `geolocation_mismatch`.  
+  - Filtros:
+    1. Transacciones de alto valor (top 10%).  
+    2. Transacciones con banderas de riesgo.  
+    3. Transacciones con descuentos elevados.
 
-| Columna              | Descripción                                |
-|----------------------|--------------------------------------------|
-| transaction_id       | Identificador único de la transacción      |
-| transaction_date     | Fecha de la operación                      |
-| customer_id          | Cliente asociado                           |
-| quantity, unit_price | Cantidad y precio unitario                 |
-| total_amount         | Monto total                                |
-| payment_method       | Forma de pago                              |
-| shipping_speed       | Velocidad de envío                         |
-| discount_applied     | Indicador de descuento aplicado            |
-| refund_requested     | Solicitud de reembolso                     |
-| velocity_flag        | Bandera de velocidad (fraude)              |
-| geolocation_mismatch | Bandera de geolocalización                 |
+- **Clientes (`df_clientes`)**  
+  Variables agregadas: `total_pedidos`, `monto_total`, `ticket_promedio`, `tasa_reembolso`, `flags_riesgo`, `customer_location_mas_comun`.  
+  - Filtros:
+    1. Clientes VIP (top 10% por monto).  
+    2. Clientes riesgosos (alto reembolso o banderas de fraude).  
+    3. Clientes frecuentes (≥ 5 pedidos).
 
-### Filtros aplicados
-1. Transacciones de alto valor (top 10% de `total_amount`).  
-2. Operaciones con banderas de riesgo (`velocity_flag`, `geolocation_mismatch`, `refund_requested`).  
-3. Compras con descuentos superiores al 30%.  
+- **Logística (`df_logistica`)**  
+  Variables: `shipping_speed`, `delivery_time_days`, `shipping_cost`, `sla_dias`, `cumple_sla`.  
+  - Filtros:
+    1. Envíos fuera de SLA.  
+    2. Envíos costosos (top 10%).  
+    3. Envíos lentos (≥ 10 días).
 
+---
 
-## 👤 2. DataFrame de Clientes (`df_clientes`)
+## 📂 2. Olist Customers Dataset
 
-### Descripción
-Este conjunto de datos reúne métricas a nivel de cliente, con el fin de segmentar y analizar diferentes perfiles de usuarios.
+**Fuente:** Kaggle – [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)  
+**Tabla en PostgreSQL:** `olist_customers`
 
-| Columna                      | Descripción                                 |
-|------------------------------|---------------------------------------------|
-| customer_id                  | Identificador único del cliente             |
-| total_pedidos                | Número de compras realizadas                |
-| monto_total                  | Valor total acumulado                       |
-| ticket_promedio              | Valor promedio de compra                    |
-| tasa_reembolso               | Proporción de pedidos con devolución        |
-| flags_riesgo                 | Número de alertas de fraude asociadas       |
-| customer_location_mas_comun  | Ubicación más frecuente del cliente         |
+### DataFrames principales
+- **Clientes (`df_clientes`)**  
+  Variables: `customer_id`, `customer_unique_id`, `customer_zip_code_prefix`.  
+  - Filtros:
+    1. Clientes únicos por `customer_unique_id`.  
+    2. Clientes con ZIP > 90000.  
+    3. Clientes duplicados en `customer_id`.
 
-### Filtros aplicados
-1. Clientes VIP → top 10% en `monto_total`.  
-2. Clientes riesgosos → `tasa_reembolso >= 30%` o `flags_riesgo > 0`.  
-3. Clientes frecuentes → `total_pedidos >= 5`.  
+- **Ubicaciones (`df_ubicaciones`)**  
+  Variables: `customer_city`, `customer_state`.  
+  - Filtros:
+    1. Clientes de São Paulo (`SP`).  
+    2. Clientes de las 10 ciudades más frecuentes.  
+    3. Clientes fuera de SP y RJ.
 
+- **Identificadores (`df_identificadores`)**  
+  Variables: `customer_id`, `customer_unique_id`.  
+  - Filtros:
+    1. Conteo de IDs únicos.  
+    2. Duplicados en `customer_unique_id`.  
+    3. Top 10 IDs más repetidos.
 
-## 🚚 3. DataFrame de Logística (`df_logistica`)
+---
 
-### Descripción
-En este DataFrame se estudia el desempeño logístico, con especial atención en los tiempos de entrega y el cumplimiento de los SLA.
+## 📂 3. Customer_DF Dataset
 
-| Columna             | Descripción                              |
-|---------------------|------------------------------------------|
-| shipping_speed      | Modalidad de envío                       |
-| delivery_time_days  | Tiempo real de entrega (días)            |
-| shipping_cost       | Costo del envío                          |
-| sla_dias            | SLA asignado según modalidad             |
-| cumple_sla          | Indicador de cumplimiento del SLA        |
+**Fuente:** Dataset académico de fraude en clientes.  
+**Tabla en PostgreSQL:** `customer_df`
 
-### Filtros aplicados
-1. Envíos fuera de SLA (`cumple_sla = FALSE`).  
-2. Envíos de alto costo (top 10% en `shipping_cost`).  
-3. Envíos con demoras considerables (`delivery_time_days >= 10`).  
+### DataFrames principales
+- **Contacto (`df_contacto`)**  
+  Variables: `customerEmail`, `customerPhone`, `customerDevice`, `customerIPAddress`.  
+  - Filtros:
+    1. Emails con dominio `gmail.com`.  
+    2. Dispositivos móviles.  
+    3. IPs duplicadas.
 
+- **Transacciones (`df_transacciones`)**  
+  Variables: `No_Transactions`, `No_Orders`, `No_Payments`.  
+  - Filtros:
+    1. Clientes con > 5 transacciones.  
+    2. Clientes con > 3 órdenes.  
+    3. Clientes con 0 pagos.
 
-## ✅ Conclusiones
+- **Riesgo (`df_riesgo`)**  
+  Variables: `customerBillingAddress`, `No_Transactions`, `Fraud`.  
+  - Filtros:
+    1. Clientes marcados como fraude.  
+    2. Direcciones de facturación duplicadas.  
+    3. Clientes con fraude y más de 2 transacciones.
 
-- **Transacciones** → se identifican operaciones sospechosas por fraude, alto valor o devoluciones frecuentes.  
-- **Clientes** → se segmentan en perfiles estratégicos como VIP, frecuentes y de alto riesgo.  
-- **Logística** → se evalúa la eficiencia de entregas, costos y el cumplimiento de SLA.  
+---
 
-La construcción de estos DataFrames, junto con sus respectivos filtros, permite establecer un flujo de **Inteligencia de Negocios** aplicable a la detección de fraude, la gestión de clientes clave y la optimización de procesos logísticos.
+## ✅ Conclusiones Generales
+
+- **Counterfeit** → Permite detectar fraude en transacciones y optimizar logística.  
+- **Olist** → Centrado en datos de clientes, útil para segmentación y geografía.  
+- **Customer_DF** → Enfocado en fraude por contacto/dispositivo, muy útil en ciberseguridad.  
+
+Este ecosistema de bases de datos brinda un **pipeline completo de BI**, cubriendo **transacciones, clientes y riesgo** desde múltiples fuentes.
+
+---
+
 ## 🚀 Tecnologías utilizadas
-- **PostgreSQL + Docker** → base de datos principal.  
-- **Python (pandas, SQLAlchemy)** → procesamiento y análisis de datos.  
-- **Jupyter / DataSpell** → entorno de notebooks.  
-- **Kaggle Dataset** → fuente de datos (CSV).
-
+- **PostgreSQL + Docker** → Almacenamiento relacional.  
+- **Python (pandas, SQLAlchemy)** → Procesamiento de datos.  
+- **Jupyter / DataSpell** → Exploración y documentación.  
+- **Kaggle + datasets académicos** → Fuentes de datos abiertas.
