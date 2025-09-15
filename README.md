@@ -122,7 +122,7 @@ Por eso, aplicamos un proceso **ETL (Extract, Transform, Load)**:
 - **Transform (Transformación):** limpiamos, normalizamos y derivamos nuevas variables.  
 - **Load (Carga):** guardamos las tablas listas en la base `maestria_bi`.  
 
----
+
 
 ## 🗂️ Fuentes de datos
 Se trabajó con tres datasets principales:
@@ -136,7 +136,7 @@ Se trabajó con tres datasets principales:
 3. **`olist_customers_dataset`**  
    - Proporciona identificadores de clientes junto con ubicación geográfica (código postal, ciudad, estado).  
 
----
+
 
 ## ⚙️ Desarrollo del Taller
 
@@ -146,7 +146,6 @@ Se trabajó con tres datasets principales:
 
 👉 **Utilidad:** reconocer cómo se relacionan los datasets y detectar problemas de calidad.
 
----
 
 ### b. Limpieza de datos
 - Normalizamos nombres de columnas (`snake_case`).  
@@ -155,14 +154,12 @@ Se trabajó con tres datasets principales:
 
 👉 **Utilidad:** garantizar consistencia y evitar errores en análisis posteriores.
 
----
 
 ### c. Variables de entorno
 Se creó un archivo **`.env`** con las credenciales de conexión a PostgreSQL.  
 
 👉 **Utilidad:** proteger contraseñas y buenas prácticas de seguridad.
 
----
 
 ### d. Transformaciones
 Aplicamos transformaciones relevantes:  
@@ -172,14 +169,12 @@ Aplicamos transformaciones relevantes:
 
 👉 **Utilidad:** enriquecer los datos para análisis temporal, validación y segmentación.
 
----
 
 ### e. Expansión de DataFrames
 Las nuevas variables fueron integradas en los DataFrames originales.  
 
 👉 **Utilidad:** mantener datasets completos y listos para consultas.
 
----
 
 ### f. Índices numéricos
 Se generaron IDs únicos y secuenciales:  
@@ -189,7 +184,6 @@ Se generaron IDs únicos y secuenciales:
 
 👉 **Utilidad:** asegurar integridad referencial y facilitar cruces en SQL.
 
----
 
 ## 📊 Visualización de resultados
 
@@ -204,7 +198,6 @@ Con los datos ya listos, construimos gráficas para extraer información:
 3. **Transacciones por mes/año**  
    Identifica tendencias estacionales y patrones de compra.  
 
----
 
 ## 🚀 Utilidad del proyecto
 - Integración de datos heterogéneos en una sola base relacional.  
@@ -212,14 +205,12 @@ Con los datos ya listos, construimos gráficas para extraer información:
 - Creación de indicadores clave (fraude, distribución geográfica, tendencias temporales).  
 - Base preparada para **dashboards de BI** o **modelos predictivos**.  
 
----
 
 ## ✅ Conclusiones
 - Los datos crudos no son útiles sin un proceso de limpieza y transformación.  
 - La fase **Transformación (T en ETL)** es crucial para dar valor a la información.  
 - Ahora contamos con una base de datos **integrada, normalizada y enriquecida**, lista para análisis estratégicos en Inteligencia de Negocios.  
 
----
 
 ## 👥 Autores
 - Equipo G1 – Maestría en Ciberseguridad 
@@ -227,7 +218,6 @@ Con los datos ya listos, construimos gráficas para extraer información:
     - MUÑOZ SARMIENTO ANDERSON JOEL
     - ORDOÑEZ VIVANCO MARIA FERNANDA
 
-<<<<<<< HEAD
 # 📘 ProyectoG1 – Componente Práctico S2
 
 ## 📌 Introducción
@@ -240,7 +230,6 @@ Por eso, aplicamos un proceso **ETL (Extract, Transform, Load)**:
 - **Extract (Extracción):** obtuvimos datos desde CSV y los cargamos en PostgreSQL.  
 - **Transform (Transformación):** limpiamos, normalizamos y derivamos nuevas variables.  
 - **Load (Carga):** guardamos las tablas listas en la base `maestria_bi`.  
-
 
 
 ## 🗂️ Fuentes de datos
@@ -289,8 +278,6 @@ Aplicamos transformaciones relevantes:
 - **Olist:** normalizamos `customer_city` y `customer_state`.  
 
 👉 **Utilidad:** enriquecer los datos para análisis temporal, validación y segmentación.
-
-
 
 ### e. Expansión de DataFrames
 Las nuevas variables fueron integradas en los DataFrames originales.  
@@ -342,7 +329,5 @@ Con los datos ya listos, construimos gráficas para extraer información:
   * ORDOÑEZ VIVANCO MARIA FERNANDA
   * MUÑOZ SARMIENTO ANDERSON JOEL
   * ALAVA BOLAÑOS JENNY JULIZZA
-=======
->>>>>>> d25c45d21229779a713cd1abfb36b44ff45cadd6
 
 - Universidad Internacional del Ecuador (UIDE)  
