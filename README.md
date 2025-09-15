@@ -83,3 +83,119 @@ La construcción de estos DataFrames, junto con sus respectivos filtros, permite
 - **Jupyter / DataSpell** → entorno de notebooks.  
 - **Kaggle Dataset** → fuente de datos (CSV).
 
+# 📘 ProyectoG1 – Componente Práctico S2
+
+## 📌 Introducción
+Este proyecto corresponde al **Componente Práctico S2** de la materia **Inteligencia de Negocios**.  
+El objetivo principal fue **preparar y transformar datos de diferentes fuentes** para dejarlos listos para análisis, aplicando técnicas de **Exploración, Limpieza, Transformación y Expansión de DataFrames**.
+
+En la práctica profesional, los datos rara vez llegan limpios: suelen contener errores, duplicados o formatos inconsistentes.  
+Por eso, aplicamos un proceso **ETL (Extract, Transform, Load)**:
+
+- **Extract (Extracción):** obtuvimos datos desde CSV y los cargamos en PostgreSQL.  
+- **Transform (Transformación):** limpiamos, normalizamos y derivamos nuevas variables.  
+- **Load (Carga):** guardamos las tablas listas en la base `maestria_bi`.  
+
+
+
+## 🗂️ Fuentes de datos
+Se trabajó con tres datasets principales:
+
+1. **`counterfeit_transactions`**  
+   - Contiene transacciones con información de fechas, montos, métodos de pago y banderas de fraude.  
+
+2. **`customer_df`**  
+   - Incluye información de clientes: correo, teléfono, IP, dirección de facturación y comportamiento histórico.  
+
+3. **`olist_customers_dataset`**  
+   - Proporciona identificadores de clientes junto con ubicación geográfica (código postal, ciudad, estado).  
+
+
+
+## ⚙️ Desarrollo del Taller
+
+### a. Exploración inicial
+- Se identificaron columnas, registros y llaves candidatas (`transaction_id`, `customer_id`).  
+- Descubrimos que `customer_df` no tenía `customer_id`, por lo que se generó un identificador artificial.
+
+👉 **Utilidad:** reconocer cómo se relacionan los datasets y detectar problemas de calidad.
+
+
+
+### b. Limpieza de datos
+- Normalizamos nombres de columnas (`snake_case`).  
+- Eliminamos duplicados.  
+- Quitamos valores nulos en campos clave.  
+
+👉 **Utilidad:** garantizar consistencia y evitar errores en análisis posteriores.
+
+
+### c. Variables de entorno
+Se creó un archivo **`.env`** con las credenciales de conexión a PostgreSQL.  
+
+👉 **Utilidad:** proteger contraseñas y buenas prácticas de seguridad.
+
+
+
+### d. Transformaciones
+Aplicamos transformaciones relevantes:  
+- **Transacciones:** derivamos `anio` y `mes` desde `transaction_date`.  
+- **Clientes:** creamos `longitud_email` usando funciones `lambda`.  
+- **Olist:** normalizamos `customer_city` y `customer_state`.  
+
+👉 **Utilidad:** enriquecer los datos para análisis temporal, validación y segmentación.
+
+
+
+### e. Expansión de DataFrames
+Las nuevas variables fueron integradas en los DataFrames originales.  
+
+👉 **Utilidad:** mantener datasets completos y listos para consultas.
+
+
+
+### f. Índices numéricos
+Se generaron IDs únicos y secuenciales:  
+- `id_transaccion`  
+- `id_cliente`  
+- `id_olist`  
+
+👉 **Utilidad:** asegurar integridad referencial y facilitar cruces en SQL.
+
+
+
+## 📊 Visualización de resultados
+
+Con los datos ya listos, construimos gráficas para extraer información:
+
+1. **Distribución de montos de transacciones**  
+   Permite detectar clientes con montos atípicamente altos o bajos.  
+
+2. **Clientes por estado**  
+   Muestra la concentración geográfica de clientes (útil en segmentación de mercado).  
+
+3. **Transacciones por mes/año**  
+   Identifica tendencias estacionales y patrones de compra.  
+
+
+
+## 🚀 Utilidad del proyecto
+- Integración de datos heterogéneos en una sola base relacional.  
+- Aseguramiento de la calidad de los datos para análisis confiables.  
+- Creación de indicadores clave (fraude, distribución geográfica, tendencias temporales).  
+- Base preparada para **dashboards de BI** o **modelos predictivos**.  
+
+
+## ✅ Conclusiones
+- Los datos crudos no son útiles sin un proceso de limpieza y transformación.  
+- La fase **Transformación (T en ETL)** es crucial para dar valor a la información.  
+- Ahora contamos con una base de datos **integrada, normalizada y enriquecida**, lista para análisis estratégicos en Inteligencia de Negocios.  
+
+
+## 👥 Autores
+- Equipo G1 – Maestría en Ciberseguridad 
+  * ORDOÑEZ VIVANCO MARIA FERNANDA
+  * MUÑOZ SARMIENTO ANDERSON JOEL
+  * ALAVA BOLAÑOS JENNY JULIZZA
+
+- Universidad Internacional del Ecuador (UIDE)  
