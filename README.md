@@ -324,6 +324,88 @@ Con los datos ya listos, construimos gráficas para extraer información:
 - Ahora contamos con una base de datos **integrada, normalizada y enriquecida**, lista para análisis estratégicos en Inteligencia de Negocios.  
 
 
+
+
+# 📊 Práctica 3 — Integración de Datos con Redshift y S3
+
+Este proyecto corresponde a la **Práctica 3 de la Maestría en Ciberseguridad y BI (UIDE)**.  
+El objetivo fue **crear un Data Warehouse en Amazon Redshift**, cargando datos desde archivos CSV en Amazon S3, para luego realizar consultas analíticas.
+
+---
+
+## 🚀 Pasos Realizados
+
+### 1️⃣ Preparación del Entorno
+- Se configuraron credenciales de **AWS IAM** con permisos sobre S3 y Redshift.
+- Se creó un **bucket S3** llamado: `intelligents`.
+- Se habilitó un **workgroup Redshift Serverless** (`uide-workgroup`) y un **namespace** (`redshift-uide`).
+
+📸 **Evidencia:**  
+- ![Creación bucket S3](images/creacion-bucket-s3.png)  
+- ![Configuración IAM](images/configuraciondemi-iam.png)  
+- ![Redshift creado](images/portal-de-amazon-redshift-ya-creado.png)  
+
+---
+
+### 2️⃣ Exportación y Subida de Datos
+- Se exportaron los dataframes de la práctica en **archivos CSV**.  
+- Archivos generados:
+  - `dim_clientes.csv`
+  - `dim_envio.csv`
+  - `dim_geografia.csv`
+  - `dim_pago.csv`
+  - `dim_tiempo.csv`
+  - `fact_transacciones.csv`
+- Los CSV fueron subidos exitosamente a **S3** en la carpeta `data/`.
+
+📸 **Evidencia:**  
+- ![Archivos exportados a S3](images/archivos-exportados-albucket-s3.png)  
+- ![Subida exitosa a S3](images/archivos-subidos-exitosamente-amazonS3.png)  
+
+---
+
+### 3️⃣ Creación de Tablas en Redshift
+- Se conectó Python (PyCharm / Jupyter) con Redshift usando `psycopg2`.  
+- Se ejecutaron scripts SQL para crear las tablas dimensionales y de hechos:  
+  - `dim_clientes`  
+  - `dim_envio`  
+  - `dim_geografia`  
+  - `dim_pago`  
+  - `dim_tiempo`  
+  - `fact_transacciones`
+
+📸 **Evidencia:**  
+- ![Esquema modelo estrella](images/modelo_estrella_bi.png)  
+- ![Base de datos Redshift](images/databases.png)  
+
+---
+
+### 4️⃣ Carga de Datos con COPY desde S3
+- Se configuró un **IAM Role** (`RedshiftS3AccessRole`) con permisos de `AmazonS3FullAccess`.
+- Se usó el comando `COPY` para cargar los datos desde los archivos CSV en S3 a las tablas en Redshift.
+
+📸 **Evidencia:**  
+- ![Subida CSV a Redshift](images/subida-csv-datos.png)  
+- ![Visualización datos Redshift](images/visualizacion-database-redshift.png)  
+
+---
+
+### 5️⃣ Validación y Consultas
+- Se verificó el conteo de registros por tabla en Redshift:  
+
+```sql
+SELECT 'dim_tiempo', COUNT(*) FROM dim_tiempo
+UNION ALL
+SELECT 'dim_clientes', COUNT(*) FROM dim_clientes
+UNION ALL
+SELECT 'dim_geografia', COUNT(*) FROM dim_geografia
+UNION ALL
+SELECT 'dim_pago', COUNT(*) FROM dim_pago
+UNION ALL
+SELECT 'dim_envio', COUNT(*) FROM dim_envio
+UNION ALL
+SELECT 'fact_transacciones', COUNT(*) FROM fact_transacciones;
+
 ## 👥 Autores
 - Equipo G1 – Maestría en Ciberseguridad 
   * ORDOÑEZ VIVANCO MARIA FERNANDA
