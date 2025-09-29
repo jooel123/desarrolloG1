@@ -1,0 +1,7 @@
+payment_method,id_pago
+Debit Card,1
+PayPal,2
+Credit Card,3
+Apple Pay,4
+Cryptocurrency,5
+Wire Transfer,6

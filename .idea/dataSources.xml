@@ -29,5 +29,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/customers</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="dev@uide-workgroup.244164817044.us-east-1.redshift-serverless.amazonaws.com" uuid="b680b6fc-88d7-4565-af02-7d7eb218b47a">
+      <driver-ref>redshift</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.amazon.redshift.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:redshift://uide-workgroup.244164817044.us-east-1.redshift-serverless.amazonaws.com:5439/dev</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

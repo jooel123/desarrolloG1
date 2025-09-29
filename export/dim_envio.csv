@@ -1,0 +1,5 @@
+shipping_speed,id_envio
+Express,1
+Priority,2
+Standard,3
+Economy,4
