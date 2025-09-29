@@ -405,6 +405,9 @@ UNION ALL
 SELECT 'dim_envio', COUNT(*) FROM dim_envio
 UNION ALL
 SELECT 'fact_transacciones', COUNT(*) FROM fact_transacciones;
+```
+
+---
 
 ## 👥 Autores
 - Equipo G1 – Maestría en Ciberseguridad 
